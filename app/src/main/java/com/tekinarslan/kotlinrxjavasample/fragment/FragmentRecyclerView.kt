@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +16,14 @@ import com.tekinarslan.kotlinrxjavasample.model.PhotosDataModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-
-
+import kotlinx.android.synthetic.main.fragment_recycler_view.*
 /**
  * Created by selimtekinarslan on 6/29/2017.
  */
 
 class FragmentRecyclerView : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    var swipeRefreshLayout: SwipeRefreshLayout? = null
-    var recyclerView: RecyclerView? = null
-    var adapter: RecyclerAdapter? = null
+    lateinit var adapter: RecyclerAdapter
     var items: ArrayList<PhotosDataModel> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,27 +32,25 @@ class FragmentRecyclerView : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViews(view!!)
+        bindViews()
         runLoadingView()
         fetchData()
     }
 
     fun runLoadingView() {
-        swipeRefreshLayout?.post({ swipeRefreshLayout?.isRefreshing = true })
+        swipe_refresh_layout.post({ swipe_refresh_layout.isRefreshing = true })
     }
 
     fun stopLoadingView() {
-        swipeRefreshLayout?.post({ swipeRefreshLayout?.isRefreshing = false })
+        swipe_refresh_layout.post({ swipe_refresh_layout.isRefreshing = false })
     }
 
-    fun bindViews(view: View) {
-        recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView?
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout) as SwipeRefreshLayout?
-        swipeRefreshLayout?.setOnRefreshListener(this)
+    fun bindViews() {
+        swipe_refresh_layout.setOnRefreshListener(this)
         adapter = RecyclerAdapter(items)
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(context)
-        recyclerView?.addItemDecoration(DividerItemDecoration(20))
+        recycler_view.adapter = adapter
+        recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.addItemDecoration(DividerItemDecoration(20))
     }
 
     fun fetchData() {
@@ -68,8 +62,8 @@ class FragmentRecyclerView : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 ?.subscribe(
                         object : DisposableObserver<ArrayList<PhotosDataModel>>() {
                             override fun onNext(response: ArrayList<PhotosDataModel>) {
-                                adapter?.setItems(response)
-                                adapter?.notifyDataSetChanged()
+                                adapter.setItems(response)
+                                adapter.notifyDataSetChanged()
                                 stopLoadingView()
                             }
 
@@ -88,5 +82,4 @@ class FragmentRecyclerView : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onRefresh() {
         fetchData()
     }
-
 }
