@@ -1,3 +1,6 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxCache-green.svg?style=true)](https://android-arsenal.com/details/3/5953)
+
+
 # RxJavaKotlinSample
 
 In this kotlin android project; okhttp retrofit and rxjava2 libraries used.
