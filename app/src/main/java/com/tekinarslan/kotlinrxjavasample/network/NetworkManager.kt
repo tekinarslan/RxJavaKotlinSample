@@ -13,15 +13,14 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class NetworkManager {
 
-    private var client: OkHttpClient? = null
-    var service: DataService? = null
+    lateinit var service: DataService
 
     init {
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-                .client(createOkHttpClient())
+                .client(OkHttpClient())
                 .build()
         createServices(retrofit)
     }
@@ -29,12 +28,4 @@ class NetworkManager {
     fun createServices(retrofit: Retrofit) {
         service = retrofit.create(DataService::class.java)
     }
-
-    fun createOkHttpClient(): OkHttpClient {
-        if (client == null) {
-            client = OkHttpClient()
-        }
-        return client as OkHttpClient
-    }
-
 }
