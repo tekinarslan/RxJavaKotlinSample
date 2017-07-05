@@ -29,15 +29,14 @@ class RecyclerAdapter(var items: ArrayList<PhotosDataModel>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val item = items[position]
-
-        holder?.title?.text = item.title
-        holder?.subtitle?.text = item.subTitle
-        Glide.with(holder?.image?.context)
-                .load(item.thumbnailUrl)
-                .placeholder(R.mipmap.ic_launcher)
-                .into(holder?.image)
-
+        items[position].let {
+            holder?.title?.text = it.title
+            holder?.subtitle?.text = it.subTitle
+            Glide.with(holder?.image?.context)
+                    .load(it.thumbnailUrl)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(holder?.image)
+        }
     }
 
     class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
